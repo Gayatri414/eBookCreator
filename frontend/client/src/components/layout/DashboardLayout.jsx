@@ -27,19 +27,24 @@ const DashboardLayout = ({ children }) => {
             AI eBook Creator
           </Link>
 
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">
-              {user?.name}
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              icon={LogOut}
-              onClick={handleLogout}
-            >
-              Logout
-            </Button>
-          </div>
+       <div className="flex items-center gap-4">
+  <Link
+    to="/profile"
+    className="text-sm text-gray-600 cursor-pointer hover:underline hover:text-violet-600"
+  >
+    {user?.name}
+  </Link>
+
+  <Button
+    variant="outline"
+    size="sm"
+    icon={LogOut}
+    onClick={handleLogout}
+  >
+    Logout
+  </Button>
+</div>
+
         </div>
       </header>
 

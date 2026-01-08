@@ -1,5 +1,10 @@
-import { useState, useRef } from "react";
-import { Sparkles, BookOpen, Plus, ArrowLeft } from "lucide-react";
+import { useState } from "react";
+import {
+  Sparkles,
+  BookOpen,
+  Plus,
+  ArrowLeft,
+} from "lucide-react";
 import Modal from "../ui/Modal";
 import InputField from "../ui/InputField";
 import SelectField from "../ui/SelectField";
@@ -7,8 +12,10 @@ import Button from "../ui/Button";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import toast from "react-hot-toast";
+import { useAuth } from "../../context/AuthContext";
 
 const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
+   const { user } = useAuth();  
   const [step, setStep] = useState(1);
 
   const [bookTitle, setBookTitle] = useState("");
@@ -20,6 +27,7 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
+  /* ================= RESET & CLOSE ================= */
   const resetModal = () => {
     setStep(1);
     setBookTitle("");
@@ -36,7 +44,7 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
     onClose();
   };
 
-  /* ------------------ STEP 1: GENERATE OUTLINE ------------------ */
+  /* ================= STEP 1: GENERATE OUTLINE ================= */
   const handleGenerateOutline = async () => {
     if (!bookTitle.trim()) {
       toast.error("Book title is required");
@@ -54,51 +62,69 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
         }
       );
 
+      // ✅ AI returns ARRAY
       setChapters(
-        res.data.chapters.map((ch, index) => ({
+        res.data.map((ch, index) => ({
           title: ch.title || `Chapter ${index + 1}`,
-          content: "",
+          content: "", // content generated later
         }))
       );
 
       setStep(2);
     } catch (err) {
-      toast.error("Failed to generate outline");
+      console.error("Generate outline error:", err);
+      toast.error(
+        err.response?.data?.message || "Failed to generate outline"
+      );
     } finally {
       setIsGenerating(false);
     }
   };
 
-  /* ------------------ CHAPTER ACTIONS ------------------ */
+  /* ================= ADD CHAPTER ================= */
   const handleAddChapter = () => {
-    setChapters([
-      ...chapters,
-      { title: `Chapter ${chapters.length + 1}`, content: "" },
+    setChapters((prev) => [
+      ...prev,
+      {
+        title: `Chapter ${prev.length + 1}`,
+        content: "",
+      },
     ]);
   };
 
+  /* ================= CREATE BOOK ================= */
   const handleCreateBook = async () => {
-    if (!chapters.length) {
-      toast.error("Add at least one chapter");
-      return;
-    }
+  if (!chapters.length) {
+    toast.error("Add at least one chapter");
+    return;
+  }
 
-    setIsCreating(true);
-    try {
-      const res = await axiosInstance.post(API_PATHS.BOOKS.CREATE_BOOK, {
+  setIsCreating(true);
+  try {
+    const res = await axiosInstance.post(
+      API_PATHS.BOOKS.CREATE,
+      {
         title: bookTitle,
-        chapters,
-      });
+        author: user?.name || "Unknown Author", // ✅ FIX
+        chapters: chapters.map((ch) => ({
+          title: ch.title,
+          content: ch.content || " ",
+        })),
+      }
+    );
 
-      toast.success("eBook created successfully");
-      onBookCreated?.(res.data);
-      handleClose();
-    } catch (err) {
-      toast.error("Failed to create book");
-    } finally {
-      setIsCreating(false);
-    }
-  };
+    toast.success("eBook created successfully");
+    onBookCreated?.(res.data);
+    handleClose();
+  } catch (err) {
+    toast.error(
+      err.response?.data?.message || "Failed to create book"
+    );
+  } finally {
+    setIsCreating(false);
+  }
+};
+
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} size="lg">
@@ -111,7 +137,7 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
         <span className="text-sm text-gray-500">{step} / 2</span>
       </div>
 
-      {/* STEP INDICATOR */}
+      {/* PROGRESS BAR */}
       <div className="w-full h-1 bg-gray-200 rounded-full mb-6">
         <div
           className="h-1 bg-violet-600 rounded-full transition-all"
@@ -119,7 +145,7 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
         />
       </div>
 
-      {/* ---------------- STEP 1 ---------------- */}
+      {/* ================= STEP 1 ================= */}
       {step === 1 && (
         <div className="space-y-4">
           <InputField
@@ -167,28 +193,21 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
         </div>
       )}
 
-      {/* ---------------- STEP 2 ---------------- */}
+      {/* ================= STEP 2 ================= */}
       {step === 2 && (
         <div className="space-y-4">
           <h3 className="font-medium">Review Chapters</h3>
 
-          {chapters.length === 0 ? (
-            <div className="border border-gray-200 rounded-xl p-6 text-center text-gray-500">
-              <BookOpen className="mx-auto mb-2 text-gray-400" />
-              No chapters yet. Add one to get started.
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {chapters.map((ch, idx) => (
-                <div
-                  key={idx}
-                  className="px-4 py-2 bg-gray-50 rounded-lg text-sm"
-                >
-                  {ch.title}
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="space-y-2">
+            {chapters.map((ch, idx) => (
+              <div
+                key={idx}
+                className="px-4 py-2 bg-gray-50 rounded-lg text-sm"
+              >
+                {ch.title}
+              </div>
+            ))}
+          </div>
 
           <div className="flex justify-between items-center pt-4">
             <Button

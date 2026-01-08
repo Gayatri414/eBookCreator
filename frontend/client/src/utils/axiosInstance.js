@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { BASE_URL } from "./apiPaths";
+console.log("TOKEN SENT:", localStorage.getItem("token"));
 
 // Create axios instance
 const axiosInstance = axios.create({

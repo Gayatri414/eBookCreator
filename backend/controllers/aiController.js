@@ -1,20 +1,22 @@
-const { GoogleGenAI } = require("@google/genai");
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const axios = require("axios");
 
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
-//@desc generate a book outline
-//@route POST /api/ai/generate-outline
-//@access Private
+// ✅ Stable & available model
+const GEMINI_URL =
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
+/* =====================================================
+   GENERATE OUTLINE
+===================================================== */
 const generateOutline = async (req, res) => {
   try {
     const { topic, style, numChapters, description } = req.body;
 
     if (!topic) {
-      return res.status(400).json({ message: "Please provide a topic" });
+      return res.status(400).json({ message: "Topic is required" });
     }
 
-    //  ADDED LOGIC: prompt creation
     const prompt = `
 Generate a book outline as a JSON array.
 
@@ -33,66 +35,57 @@ Rules:
   }
 `;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-lite",
-      contents: prompt,
-    });
+    const response = await axios.post(
+      `${GEMINI_URL}?key=${GEMINI_API_KEY}`,
+      {
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: prompt }],
+          },
+        ],
+      }
+    );
 
-    //  CORRECTION: access text safely
-    const text = response.text;
+    const text =
+      response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
-    // find and extract the json array from the response text
-    const startIndex = text.indexOf("[");
-    const endIndex = text.lastIndexOf("]");
+    if (!text) throw new Error("Empty AI response");
 
-    if (startIndex === -1 || endIndex === -1) {
-      console.error("Could not find JSON array in AI response:", text);
-      return res.status(500).json({
-        message: "Failed to parse AI response, no JSON array found.",
-      });
+    const start = text.indexOf("[");
+    const end = text.lastIndexOf("]");
+
+    if (start === -1 || end === -1) {
+      return res
+        .status(500)
+        .json({ message: "Invalid AI response format" });
     }
 
-    const jsonString = text.substring(startIndex, endIndex + 1);
-
-    
-    let outline;
-    try {
-      outline = JSON.parse(jsonString);
-    } catch (err) {
-      console.error("Invalid JSON from AI:", jsonString);
-      return res.status(500).json({
-        message: "AI returned invalid JSON",
-      });
-    }
-
-    
+    const outline = JSON.parse(text.substring(start, end + 1));
     res.status(200).json(outline);
-
   } catch (error) {
-    console.error("Error generating outline:", error);
+    console.error("🔥 OUTLINE ERROR:", error.response?.data || error.message);
     res.status(500).json({
-      message: "Server error during AI outline generation",
+      message: "Failed to generate outline",
     });
   }
 };
 
-
-//@desc  Generate content for a chapter
-//@route POST /api/ai/generate-chapter-content
-//@access Private
-
+/* =====================================================
+   GENERATE CHAPTER CONTENT  ✅ THIS WAS MISSING
+===================================================== */
 const generateChapterContent = async (req, res) => {
+  console.log("🔥 CHAPTER AI HIT:", req.body);
+
   try {
     const { topic, chapterTitle, chapterSummary, style, wordCount } = req.body;
 
-   
     if (!topic || !chapterTitle) {
       return res.status(400).json({
         message: "Topic and chapter title are required",
       });
     }
 
-   
     const prompt = `
 Write a detailed book chapter.
 
@@ -103,34 +96,36 @@ Writing style: ${style || "clear and engaging"}
 Length: about ${wordCount || 800} words
 
 Rules:
+- Plain text only
 - No markdown
 - No bullet points
-- Return only plain text
 `;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-lite",
-      contents: prompt,
-    });
+    const response = await axios.post(
+      `${GEMINI_URL}?key=${GEMINI_API_KEY}`,
+      {
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: prompt }],
+          },
+        ],
+      }
+    );
 
-    const chapterText = response.text;
+    const content =
+      response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
-    if (!chapterText) {
-      return res.status(500).json({
-        message: "AI returned empty chapter content",
-      });
-    }
+    if (!content) throw new Error("Empty chapter response");
 
-  
     res.status(200).json({
       title: chapterTitle,
-      content: chapterText,
+      content,
     });
-
   } catch (error) {
-    console.error("Error generating chapter:", error);
+    console.error("🔥 CHAPTER ERROR:", error.response?.data || error.message);
     res.status(500).json({
-      message: "Server error during AI chapter generation",
+      message: "Failed to generate chapter",
     });
   }
 };

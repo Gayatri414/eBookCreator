@@ -1,17 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-const{
+const {
   generateOutline,
   generateChapterContent,
-}=require("../controllers/aiController");
-const protect=require("../middleware/authMiddleware.js");
+} = require("../controllers/aiController");
 
-//Apply protect middleware to all routes
-router.use(protect);
+const protect = require("../middleware/authMiddleware.js");
 
-router.post("/generate-outline",generateOutline);
-router.post("/generate-chapter-content",generateChapterContent);
+//  AI routes (protected)
+router.post("/generate-outline", protect, generateOutline);
+router.post("/generate-chapter-content", generateChapterContent);
 
-
-module.exports = router; 
+module.exports = router;

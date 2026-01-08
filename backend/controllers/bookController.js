@@ -5,25 +5,26 @@ const Book = require("../models/Book");
 // @access  Private
 const createBook = async (req, res) => {
   try {
-    const { title, author, subtitle, chapters } = req.body;
+    const { title, subtitle, chapters } = req.body;
 
-    if (!title || !author) {
-      return res
-        .status(400)
-        .json({ message: "Please provide a title and author" });
+    // ✅ Validate
+    if (!title) {
+      return res.status(400).json({
+        message: "Please provide a title",
+      });
     }
 
+    // Create book (ONLY ONCE)
     const book = await Book.create({
-      userId: req.user.userId || req.user._id,
+      userId: req.user._id,        // user from auth middleware
       title,
-      author,
       subtitle,
+      author: req.user.name,       //  auto author
       chapters,
     });
-
-    res.status(201).json(book);
+     res.status(201).json(book);
   } catch (error) {
-    console.error(error);
+    console.error("CREATE BOOK ERROR:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -130,7 +131,6 @@ const deleteBook = async (req, res) => {
 const updateBookCover = async (req, res) => {
   try {
     const userId = req.user.userId || req.user._id;
-
     const book = await Book.findById(req.params.id);
 
     if (!book) {
@@ -145,7 +145,8 @@ const updateBookCover = async (req, res) => {
       return res.status(400).json({ message: "No image uploaded" });
     }
 
-    book.coverImage = `/uploads/${req.file.filename}`;
+    // ✅ Cloudinary URL
+    book.coverImage = req.file.path;
     await book.save();
 
     res.status(200).json(book);

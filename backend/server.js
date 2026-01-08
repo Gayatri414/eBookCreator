@@ -29,7 +29,7 @@ connectDB();
 app.use(express.json());
 
 //  Static folder for uploads
-app.use("/backend/uploads", express.static(path.join(__dirname, "uploads")));
+ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 console.log("authRoutes:", authRoutes);
 console.log("bookRoutes:", bookRoutes);

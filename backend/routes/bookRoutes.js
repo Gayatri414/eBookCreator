@@ -8,24 +8,26 @@ const {
   updateBook,
   deleteBook,
   updateBookCover,
-} = require("../controllers/bookController.js");
+} = require("../controllers/bookController");
 
-const protect = require("../middleware/authMiddleware.js");
-const upload = require("../middleware/uploadMiddleware.js");
+const protect = require("../middleware/authMiddleware");
+const upload = require("../middleware/uploadMiddleware");
 
-// apply protect middleware to all routes
 router.use(protect);
 
-// create & get books
+// ✅ CREATE & GET
 router.route("/")
   .post(createBook)
   .get(getBooks);
 
-// update book cover (MUST be before :id)
-router.route("/cover/:id")
-  .put(upload, updateBookCover);
+// 🔥 MUST BE ABOVE `/:id`
+router.put(
+  "/cover/:id",
+  upload,
+  updateBookCover
+);
 
-// get / update / delete by id
+// ✅ ID ROUTES (LAST)
 router.route("/:id")
   .get(getBookById)
   .put(updateBook)

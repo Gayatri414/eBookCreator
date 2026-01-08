@@ -53,9 +53,9 @@ const Hero = () => {
               <ArrowRight className="w-5 h-5" />
             </Link>
 
-            <button className="text-gray-700 font-medium hover:text-violet-600">
+            {/* <button className="text-gray-700 font-medium hover:text-violet-600">
               Watch Demo →
-            </button>
+            </button> */}
           </div>
 
           {/* Stats */}

@@ -7,7 +7,7 @@ const createBook = async (req, res) => {
   try {
     const { title, subtitle, chapters } = req.body;
 
-    // ✅ Validate
+    //  Validate
     if (!title) {
       return res.status(400).json({
         message: "Please provide a title",
@@ -145,7 +145,7 @@ const updateBookCover = async (req, res) => {
       return res.status(400).json({ message: "No image uploaded" });
     }
 
-    // ✅ Cloudinary URL
+    // Cloudinary URL
     book.coverImage = req.file.path;
     await book.save();
 

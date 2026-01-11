@@ -16,7 +16,7 @@ const fs = require("fs");
 
 const md = new MarkdownIt();
 
-/* ================= DOCX TYPOGRAPHY (SAFE) ================= */
+/*  DOCX TYPOGRAPHY (SAFE)  */
 const DOCX_STYLE = {
   fonts: {
     body: "Times New Roman",
@@ -38,7 +38,7 @@ const DOCX_STYLE = {
   },
 };
 
-/* ================= PDF TYPOGRAPHY ================= */
+/*  PDF TYPOGRAPHY */
 const TYPOGRAPHY = {
   fonts: {
     serif: "Times-Roman",
@@ -54,7 +54,7 @@ const TYPOGRAPHY = {
   },
 };
 
-/* ================= MARKDOWN → DOCX ================= */
+/* MARKDOWN → DOCX */
 const processMarkdownToDocx = (markdown = "") => {
   const tokens = md.parse(markdown, {});
   const paragraphs = [];
@@ -97,7 +97,7 @@ const processMarkdownToDocx = (markdown = "") => {
       }
     }
 
-    // ---------- PARAGRAPH ----------
+    //  PARAGRAPH 
     if (token.type === "paragraph_open") {
       const next = tokens[i + 1];
       if (next?.type === "inline") {
@@ -119,7 +119,7 @@ const processMarkdownToDocx = (markdown = "") => {
       }
     }
 
-    // ---------- LISTS ----------
+    //  LISTS 
     if (token.type === "ordered_list_open") {
       listType = "ordered";
       orderedCounter = 1;
@@ -159,7 +159,7 @@ const processMarkdownToDocx = (markdown = "") => {
   return paragraphs;
 };
 
-/* ================= INLINE PDF RENDER ================= */
+/*  INLINE PDF RENDER  */
 const renderInlineToken = (doc, token) => {
   if (!token?.children?.length) return;
 
@@ -195,7 +195,7 @@ const renderInlineToken = (doc, token) => {
   doc.text("\n");
 };
 
-/* ================= EXPORT DOCX ================= */
+/*  EXPORT DOCX  */
 const exportAsDocument = async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
@@ -207,7 +207,7 @@ const exportAsDocument = async (req, res) => {
 
     const sections = [];
 
-    // ---------- COVER IMAGE ----------
+    //  COVER IMAGE 
     if (book.coverImage && typeof book.coverImage === "string") {
       const imagePath = path.join(process.cwd(), book.coverImage.substring(1));
       if (fs.existsSync(imagePath)) {
@@ -227,7 +227,7 @@ const exportAsDocument = async (req, res) => {
       }
     }
 
-    // ---------- TITLE PAGE ----------
+    //  TITLE PAGE 
     sections.push(
       new Paragraph({
         children: [
@@ -243,7 +243,7 @@ const exportAsDocument = async (req, res) => {
       new Paragraph({ pageBreakBefore: true })
     );
 
-    // ---------- CHAPTERS ----------
+    //  CHAPTERS 
     book.chapters?.forEach((chapter) => {
       sections.push(...processMarkdownToDocx(chapter.content || ""));
     });
@@ -269,7 +269,7 @@ const exportAsDocument = async (req, res) => {
 
     res.send(buffer);
   } catch (error) {
-  console.error("🔥 EXPORT DOCX ERROR 🔥");
+  console.error(" EXPORT DOCX ERROR ");
   console.error(error);
   console.error(error.stack);
 
@@ -281,7 +281,7 @@ const exportAsDocument = async (req, res) => {
 
 };
 
-/* ================= EXPORT PDF ================= */
+/*  EXPORT PDF  */
 const exportAsPDF = async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
@@ -301,7 +301,7 @@ const exportAsPDF = async (req, res) => {
 
     doc.pipe(res);
 
-    // ---------- TITLE ----------
+    //TITLE 
     doc
       .font(TYPOGRAPHY.fonts.serifBold)
       .fontSize(TYPOGRAPHY.sizes.title)
@@ -310,7 +310,7 @@ const exportAsPDF = async (req, res) => {
 
     doc.addPage();
 
-    // ---------- CHAPTERS ----------
+    //  CHAPTERS 
     book.chapters?.forEach((chapter, index) => {
       doc
         .font(TYPOGRAPHY.fonts.serifBold)
@@ -333,7 +333,7 @@ const exportAsPDF = async (req, res) => {
   }
 };
 
-/* ================= EXPORTS ================= */
+/*  EXPORTS */
 module.exports = {
   exportAsDocument,
   exportAsPDF,

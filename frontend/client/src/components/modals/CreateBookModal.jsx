@@ -105,7 +105,7 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
       API_PATHS.BOOKS.CREATE,
       {
         title: bookTitle,
-        author: user?.name || "Unknown Author", // ✅ FIX
+        author: user?.name || "Unknown Author", //  FIX
         chapters: chapters.map((ch) => ({
           title: ch.title,
           content: ch.content || " ",

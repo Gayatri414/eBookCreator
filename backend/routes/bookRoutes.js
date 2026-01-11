@@ -15,19 +15,19 @@ const upload = require("../middleware/uploadMiddleware");
 
 router.use(protect);
 
-// ✅ CREATE & GET
+//  CREATE & GET
 router.route("/")
   .post(createBook)
   .get(getBooks);
 
-// 🔥 MUST BE ABOVE `/:id`
+// MUST BE ABOVE `/:id`
 router.put(
   "/cover/:id",
   upload,
   updateBookCover
 );
 
-// ✅ ID ROUTES (LAST)
+//  ID ROUTES (LAST)
 router.route("/:id")
   .get(getBookById)
   .put(updateBook)

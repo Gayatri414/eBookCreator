@@ -2,13 +2,13 @@ const axios = require("axios");
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
-// ✅ Stable & available model
+//  Stable & available model
 const GEMINI_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
-/* =====================================================
-   GENERATE OUTLINE
-===================================================== */
+
+  // GENERATE OUTLINE
+
 const generateOutline = async (req, res) => {
   try {
     const { topic, style, numChapters, description } = req.body;
@@ -64,18 +64,18 @@ Rules:
     const outline = JSON.parse(text.substring(start, end + 1));
     res.status(200).json(outline);
   } catch (error) {
-    console.error("🔥 OUTLINE ERROR:", error.response?.data || error.message);
+    console.error(" OUTLINE ERROR:", error.response?.data || error.message);
     res.status(500).json({
       message: "Failed to generate outline",
     });
   }
 };
 
-/* =====================================================
-   GENERATE CHAPTER CONTENT  ✅ THIS WAS MISSING
-===================================================== */
+
+  // GENERATE CHAPTER CONTENT   
+
 const generateChapterContent = async (req, res) => {
-  console.log("🔥 CHAPTER AI HIT:", req.body);
+  console.log(" CHAPTER AI HIT:", req.body);
 
   try {
     const { topic, chapterTitle, chapterSummary, style, wordCount } = req.body;
@@ -123,7 +123,7 @@ Rules:
       content,
     });
   } catch (error) {
-    console.error("🔥 CHAPTER ERROR:", error.response?.data || error.message);
+    console.error(" CHAPTER ERROR:", error.response?.data || error.message);
     res.status(500).json({
       message: "Failed to generate chapter",
     });

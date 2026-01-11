@@ -10,7 +10,7 @@ const BookCard = ({ book, onDelete }) => {
       <p className="text-sm text-gray-500">{book.author}</p>
 
       <div className="flex justify-end gap-3 mt-4">
-        {/* ✅ EDIT → FRONTEND ROUTE */}
+        {/* EDIT → FRONTEND ROUTE */}
         <button
           onClick={() => navigate(`/editor/${book._id}`)}
           className="text-blue-600 hover:text-blue-800"

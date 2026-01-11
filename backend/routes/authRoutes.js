@@ -10,11 +10,11 @@ const {
 
 const protect = require("../middleware/authMiddleware");
 
-// ✅ PUBLIC ROUTES (NO protect here)
+//  PUBLIC ROUTES (NO protect here)
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 
-// ✅ PRIVATE ROUTES (protect FIRST)
+//  PRIVATE ROUTES (protect FIRST)
 router.get("/profile", protect, getProfile);
 router.put("/me", protect, updateUserProfile);
 

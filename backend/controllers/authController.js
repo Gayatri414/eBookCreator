@@ -8,7 +8,7 @@ const generateToken = (id) => {
   });
 };
 
-// ================= REGISTER USER =================
+// REGISTER USER 
 exports.registerUser = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -23,7 +23,7 @@ exports.registerUser = async (req, res) => {
     const user = await User.create({
       name,
       email,
-      password, // ✅ plain password
+      password,
     });
 
     res.status(201).json({
@@ -33,7 +33,7 @@ exports.registerUser = async (req, res) => {
       token: generateToken(user._id),
     });
   } catch (error) {
-  console.error("FULL ERROR STACK 👇");
+  console.error("FULL ERROR STACK ");
   console.error(error.stack);
   res.status(500).json({
     message: "Server error",
@@ -43,7 +43,7 @@ exports.registerUser = async (req, res) => {
 
 };
 
-// ================= LOGIN USER =================
+//  LOGIN USER 
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -67,12 +67,12 @@ exports.loginUser = async (req, res) => {
       token: generateToken(user._id),
     });
   } catch (error) {
-    console.error("LOGIN ERROR 👉", error);
+    console.error("LOGIN ERROR ", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-// ================= GET PROFILE =================
+//  GET PROFILE 
 exports.getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
@@ -82,7 +82,7 @@ exports.getProfile = async (req, res) => {
   }
 };
 
-// ================= UPDATE PROFILE =================
+//  UPDATE PROFILE
 exports.updateUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);

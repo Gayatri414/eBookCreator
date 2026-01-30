@@ -65,7 +65,7 @@ const EditorPage = () => {
   if (!file) return;
 
   const formData = new FormData();
-  formData.append("cover", file); // 🔴 MUST MATCH multer
+  formData.append("cover", file); //  MUST MATCH multer
 
   try {
     setIsUploadingCover(true);
@@ -81,7 +81,7 @@ const EditorPage = () => {
 );
 
 
-    // ✅ UPDATE IMAGE FROM RESPONSE
+    //  UPDATE IMAGE FROM RESPONSE
     setBook((prev) => ({
       ...prev,
       coverImage: res.data.coverImage,

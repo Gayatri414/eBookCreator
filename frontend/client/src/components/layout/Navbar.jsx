@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
-import ProfileDropdown from "./ProfileDropdown";
+// import ProfileDropdown from "./ProfileDropdown";
 import { Menu, X, BookOpen, LogOut } from "lucide-react";
 
 const Navbar = () => {

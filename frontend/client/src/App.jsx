@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import PageTransition from "./components/layout/PageTransition";
 
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
@@ -12,6 +13,7 @@ import LogoutPage from "./pages/LogoutPage";
 
 const App = () => {
   return (
+    <PageTransition>
     <Routes>
       {/* ================= PUBLIC ROUTES ================= */}
       <Route path="/" element={<LandingPage />} />
@@ -59,6 +61,7 @@ const App = () => {
       {/* ================= FALLBACK ================= */}
       <Route path="*" element={<LandingPage />} />
     </Routes>
+    </PageTransition>
   );
 };
 

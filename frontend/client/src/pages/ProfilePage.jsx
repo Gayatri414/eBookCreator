@@ -13,7 +13,7 @@ import { API_PATHS } from "../utils/apiPaths";
 const ProfilePage = () => {
   const { user, updateUser } = useAuth();
 
-  // ✅ IMPORTANT GUARD
+  //  IMPORTANT GUARD
   if (!user) {
     return (
       <DashboardLayout>

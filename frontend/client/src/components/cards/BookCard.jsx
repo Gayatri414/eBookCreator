@@ -1,11 +1,23 @@
+import { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Edit, Trash2 } from "lucide-react";
+import gsap from "gsap";
 
 const BookCard = ({ book, onDelete }) => {
   const navigate = useNavigate();
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    if (!cardRef.current) return;
+    gsap.fromTo(
+      cardRef.current,
+      { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }
+    );
+  }, []);
 
   return (
-    <div className="border rounded-lg p-4 bg-white shadow-sm">
+    <div ref={cardRef} className="border rounded-lg p-4 bg-white shadow-sm">
       <h3 className="font-semibold text-lg">{book.title}</h3>
       <p className="text-sm text-gray-500">{book.author}</p>
 

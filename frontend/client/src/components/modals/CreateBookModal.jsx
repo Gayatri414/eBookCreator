@@ -62,7 +62,7 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
         }
       );
 
-      // ✅ AI returns ARRAY
+      // AI returns ARRAY
       setChapters(
         res.data.map((ch, index) => ({
           title: ch.title || `Chapter ${index + 1}`,

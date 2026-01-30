@@ -1,7 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { Save, FileDown, Sparkles } from "lucide-react";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
+import gsap from "gsap";
 
 import Button from "../ui/Button";
 import Dropdown, { DropdownItem } from "../ui/Dropdown";
@@ -18,6 +19,16 @@ const ChapterEditorTab = ({
 }) => {
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    if (!contentRef.current) return;
+    gsap.fromTo(
+      contentRef.current,
+      { opacity: 0, scale: 0.98 },
+      { opacity: 1, scale: 1, duration: 0.35, ease: "power2.out" }
+    );
+  }, [selectedChapterIndex]);
 
   // safety check
   if (
@@ -60,6 +71,7 @@ const ChapterEditorTab = ({
 
   return (
     <div
+      ref={contentRef}
       className={`flex flex-col h-full bg-white ${
         isFullscreen ? "fixed inset-0 z-50" : ""
       }`}

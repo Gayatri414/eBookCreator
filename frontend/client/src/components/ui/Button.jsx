@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
+import gsap from "gsap";
 
 const Button = ({
   variant = "primary",
@@ -9,6 +10,21 @@ const Button = ({
   className = "",
   ...props
 }) => {
+  const btnRef = useRef(null);
+
+  useEffect(() => {
+    if (!btnRef.current) return;
+    const el = btnRef.current;
+    const onEnter = () => gsap.to(el, { scale: 1.03, duration: 0.2, ease: "power2.out" });
+    const onLeave = () => gsap.to(el, { scale: 1, duration: 0.2, ease: "power2.out" });
+    el.addEventListener("mouseenter", onEnter);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mouseenter", onEnter);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
   const variants = {
     primary:
       "bg-gradient-to-r from-violet-500 to-purple-600 text-white hover:opacity-90",
@@ -26,6 +42,7 @@ const Button = ({
 
   return (
     <button
+      ref={btnRef}
       disabled={isLoading}
       className={`
         inline-flex items-center justify-center gap-2

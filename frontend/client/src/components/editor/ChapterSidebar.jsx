@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { ArrowLeft, Sparkles, Trash2, Plus, GripVertical } from "lucide-react";
+import gsap from "gsap";
 import { useNavigate } from "react-router-dom";
 import {
   DndContext,
@@ -31,15 +32,32 @@ const SortableItem = ({
     transform,
     transition,
   } = useSortable({ id });
+  const itemRef = useRef(null);
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
   };
 
+  useEffect(() => {
+    if (!itemRef.current) return;
+    const el = itemRef.current;
+    const onEnter = () => gsap.to(el, { scale: 1.02, duration: 0.2, ease: "power2.out" });
+    const onLeave = () => gsap.to(el, { scale: 1, duration: 0.2, ease: "power2.out" });
+    el.addEventListener("mouseenter", onEnter);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mouseenter", onEnter);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
   return (
     <div
-      ref={setNodeRef}
+      ref={(node) => {
+        setNodeRef(node);
+        itemRef.current = node;
+      }}
       style={style}
       onClick={() => onSelect(index)}
       className={`flex items-center justify-between gap-2 p-3 rounded-lg border cursor-pointer
@@ -95,11 +113,21 @@ const ChapterSidebar = ({
   onReorderChapters,
 }) => {
   const navigate = useNavigate();
+  const sidebarRef = useRef(null);
+
+  useEffect(() => {
+    if (!sidebarRef.current || !book) return;
+    gsap.fromTo(
+      sidebarRef.current,
+      { x: -24, opacity: 0 },
+      { x: 0, opacity: 1, duration: 0.4, ease: "power2.out" }
+    );
+  }, [book]);
 
   if (!book) return null;
 
   return (
-    <div className="w-80 bg-white border-r h-screen flex flex-col">
+    <div ref={sidebarRef} className="w-80 bg-white border-r h-screen flex flex-col">
       {/* HEADER */}
       <div className="flex items-center gap-3 p-4 border-b">
         <button onClick={() => navigate("/dashboard")}>

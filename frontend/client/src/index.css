@@ -4,16 +4,121 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- @theme{
-  --font-display:"Inter",sans-serif;
-  --breakpoint-3xl:1920px;
-  --color-primary:#FF9324;
- }
- @layer base{
-  html{
-    font-family:var(--font-display);
-  }
-body{
-  background-color:#fcfbfc;
+
+@theme {
+  --font-display: "Inter", sans-serif;
+  --breakpoint-3xl: 1920px;
+  --color-primary: #f97316;
+  --color-secondary: #3b82f6;
 }
- }
+
+@layer base {
+  html {
+    font-family: var(--font-display);
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    background-color: #ffffff;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+  
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  .bg-size-200 {
+    background-size: 200% 200%;
+  }
+  
+  .bg-pos-100 {
+    background-position: 100% 100%;
+  }
+  
+  .text-shadow-sm {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #f97316, #3b82f6);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #ea580c, #2563eb);
+}
+
+/* Selection styles */
+::selection {
+  background-color: rgba(249, 115, 22, 0.2);
+  color: #1f2937;
+}
+
+::-moz-selection {
+  background-color: rgba(249, 115, 22, 0.2);
+  color: #1f2937;
+}
+
+/* Focus styles */
+.focus-visible {
+  outline: 2px solid #f97316;
+  outline-offset: 2px;
+}
+
+/* Animation keyframes */
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(249, 115, 22, 0.6);
+  }
+}

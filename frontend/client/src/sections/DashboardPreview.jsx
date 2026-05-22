@@ -75,7 +75,7 @@ const DashboardPreview = () => {
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-br from-white via-gray-50 to-blue-50 relative overflow-hidden">
+    <section className="py-24 bg-gradient-to-br from-white via-gray-50 to-blue-50 relative overflow-hidden scroll-mt-16">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-0 w-96 h-96 bg-gradient-to-r from-primary-100/30 to-secondary-100/30 rounded-full blur-3xl -translate-x-1/2" />

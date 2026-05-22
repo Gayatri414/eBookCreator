@@ -52,7 +52,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-mt-16">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Mouse follow glow */}
@@ -160,20 +160,28 @@ const Hero = () => {
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
               </Button>
             </Link>
-            <Link to="#demo">
+            <button 
+              onClick={() => {
+                const element = document.getElementById('features');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="focus:outline-none"
+            >
               <Button 
                 variant="outline" 
                 size="xl"
                 className="group"
               >
-                Watch Demo
+                Learn More
                 <motion.div
-                  className="w-2 h-2 bg-red-500 rounded-full ml-2"
+                  className="w-2 h-2 bg-primary-500 rounded-full ml-2"
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 />
               </Button>
-            </Link>
+            </button>
           </motion.div>
 
           {/* Stats */}
@@ -231,14 +239,20 @@ const Hero = () => {
       </motion.div>
 
       {/* Scroll Indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+      <motion.button
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 focus:outline-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 3, duration: 1 }}
+        onClick={() => {
+          const element = document.getElementById('features');
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }}
       >
         <motion.div
-          className="w-6 h-10 border-2 border-gray-300 rounded-full flex justify-center"
+          className="w-6 h-10 border-2 border-gray-300 rounded-full flex justify-center hover:border-primary-400 transition-colors duration-300"
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
@@ -248,7 +262,7 @@ const Hero = () => {
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           />
         </motion.div>
-      </motion.div>
+      </motion.button>
     </section>
   );
 };

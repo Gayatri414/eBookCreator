@@ -8,28 +8,61 @@ import { useAuth } from '../../context/AuthContext';
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
   const location = useLocation();
   const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+      
+      // Update active section based on scroll position
+      const sections = ['home', 'features', 'pricing', 'about'];
+      const scrollPosition = window.scrollY + 100; // Offset for navbar height
+      
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const scrollToSection = (sectionId) => {
+    // If we're not on the landing page, navigate there first
+    if (location.pathname !== '/') {
+      window.location.href = `/#${sectionId}`;
+      return;
+    }
+
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+    setIsMobileMenuOpen(false);
+  };
+
   const navItems = [
-    { name: 'Home', path: '/' },
-    { name: 'Features', path: '/#features' },
-    { name: 'Pricing', path: '/#pricing' },
-    { name: 'About', path: '/#about' },
+    { name: 'Home', id: 'home' },
+    { name: 'Features', id: 'features' },
+    { name: 'Pricing', id: 'pricing' },
+    { name: 'About', id: 'about' },
   ];
 
-  const isActive = (path) => {
-    if (path === '/') return location.pathname === '/';
-    return location.pathname.startsWith(path.replace('/#', ''));
+  const isActive = (sectionId) => {
+    if (location.pathname !== '/') return false;
+    return activeSection === sectionId;
   };
 
   return (
@@ -51,14 +84,17 @@ const Navbar = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Link to="/" className="flex items-center space-x-2">
+            <button 
+              onClick={() => scrollToSection('home')}
+              className="flex items-center space-x-2 focus:outline-none"
+            >
               <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">B</span>
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
                 BookCraft
               </span>
-            </Link>
+            </button>
           </motion.div>
 
           {/* Desktop Navigation */}
@@ -66,16 +102,16 @@ const Navbar = () => {
             <div className="ml-10 flex items-baseline space-x-8">
               {navItems.map((item) => (
                 <motion.div key={item.name} className="relative">
-                  <Link
-                    to={item.path}
-                    className={`px-3 py-2 text-sm font-medium transition-colors duration-200 relative ${
-                      isActive(item.path)
+                  <button
+                    onClick={() => scrollToSection(item.id)}
+                    className={`px-3 py-2 text-sm font-medium transition-colors duration-200 relative focus:outline-none ${
+                      isActive(item.id)
                         ? 'text-primary-600'
                         : 'text-gray-700 hover:text-primary-600'
                     }`}
                   >
                     {item.name}
-                    {isActive(item.path) && (
+                    {isActive(item.id) && (
                       <motion.div
                         className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full"
                         layoutId="activeTab"
@@ -83,7 +119,7 @@ const Navbar = () => {
                         transition={{ type: "spring", stiffness: 500, damping: 30 }}
                       />
                     )}
-                  </Link>
+                  </button>
                 </motion.div>
               ))}
             </div>
@@ -131,7 +167,7 @@ const Navbar = () => {
           <div className="md:hidden">
             <motion.button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-xl text-gray-700 hover:text-primary-600 hover:bg-white/50 transition-colors duration-200"
+              className="inline-flex items-center justify-center p-2 rounded-xl text-gray-700 hover:text-primary-600 hover:bg-white/50 transition-colors duration-200 focus:outline-none"
               whileTap={{ scale: 0.95 }}
             >
               {isMobileMenuOpen ? (
@@ -162,17 +198,16 @@ const Navbar = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 }}
                 >
-                  <Link
-                    to={item.path}
-                    className={`block px-3 py-2 text-base font-medium rounded-xl transition-colors duration-200 ${
-                      isActive(item.path)
+                  <button
+                    onClick={() => scrollToSection(item.id)}
+                    className={`block w-full text-left px-3 py-2 text-base font-medium rounded-xl transition-colors duration-200 focus:outline-none ${
+                      isActive(item.id)
                         ? 'text-primary-600 bg-primary-50'
                         : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
                     }`}
-                    onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {item.name}
-                  </Link>
+                  </button>
                 </motion.div>
               ))}
               

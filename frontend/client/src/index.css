@@ -27,6 +27,11 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Ensure sections have proper scroll margin for fixed navbar */
+  section {
+    scroll-margin-top: 80px;
+  }
 }
 
 @layer utilities {
@@ -48,6 +53,15 @@
   
   .text-shadow-lg {
     text-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Scroll margin utilities */
+  .scroll-mt-16 {
+    scroll-margin-top: 4rem;
+  }
+  
+  .scroll-mt-20 {
+    scroll-margin-top: 5rem;
   }
 }
 

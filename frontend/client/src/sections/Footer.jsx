@@ -17,15 +17,22 @@ const Footer = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const footerLinks = {
     product: [
-      { name: 'Features', href: '/#features' },
-      { name: 'Pricing', href: '/#pricing' },
+      { name: 'Features', href: '#features', isSection: true },
+      { name: 'Pricing', href: '#pricing', isSection: true },
       { name: 'Templates', href: '/templates' },
       { name: 'API', href: '/api' },
     ],
     company: [
-      { name: 'About', href: '/about' },
+      { name: 'About', href: '#about', isSection: true },
       { name: 'Blog', href: '/blog' },
       { name: 'Careers', href: '/careers' },
       { name: 'Press', href: '/press' },
@@ -116,12 +123,21 @@ const Footer = () => {
                 <ul className="space-y-3">
                   {links.map((link) => (
                     <li key={link.name}>
-                      <Link
-                        to={link.href}
-                        className="text-gray-300 hover:text-white transition-colors duration-300 text-sm hover:translate-x-1 inline-block transform transition-transform"
-                      >
-                        {link.name}
-                      </Link>
+                      {link.isSection ? (
+                        <button
+                          onClick={() => scrollToSection(link.href.replace('#', ''))}
+                          className="text-gray-300 hover:text-white transition-colors duration-300 text-sm hover:translate-x-1 inline-block transform transition-transform focus:outline-none text-left"
+                        >
+                          {link.name}
+                        </button>
+                      ) : (
+                        <Link
+                          to={link.href}
+                          className="text-gray-300 hover:text-white transition-colors duration-300 text-sm hover:translate-x-1 inline-block transform transition-transform"
+                        >
+                          {link.name}
+                        </Link>
+                      )}
                     </li>
                   ))}
                 </ul>

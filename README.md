@@ -25,7 +25,7 @@ Live Link=https://ebookcreator-me5g.onrender.com
 # Project Screenshots
 
 ## Home Page
-![Home](./screenshots/Screenshot%202026-06-22%20161738.png)
+![Home](./.geetkeep/Screenshot%202026-06-22%20161738.png)
 
 ## Login Page
 ![Login](./screenshots/Screenshot%202026-06-22%20161754.png)

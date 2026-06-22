@@ -122,14 +122,14 @@ Rules:
       title: chapterTitle,
       content,
     });
-  } catch (error) {
-  console.error("OUTLINE ERROR FULL:");
+  }catch (error) {
+  console.error("===== GEMINI ERROR =====");
   console.error(error.response?.data);
   console.error(error.message);
 
   res.status(500).json({
     success: false,
-    message: error.response?.data || error.message,
+    error: error.response?.data || error.message,
   });
 }
 };

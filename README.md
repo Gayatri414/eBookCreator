@@ -21,7 +21,8 @@ PDF download support
 Ebook marketplace
 User reviews & ratings
 Cloud storage integration
-Live Link=https://ebookcreator-me5g.onrender.com
+Frontend Live Link=https://e-book-creator-nu.vercel.app/
+Backend Live Link=https://ebookcreator-me5g.onrender.com
 
 
 

@@ -123,11 +123,15 @@ Rules:
       content,
     });
   } catch (error) {
-    console.error(" CHAPTER ERROR:", error.response?.data || error.message);
-    res.status(500).json({
-      message: "Failed to generate chapter",
-    });
-  }
+  console.error("OUTLINE ERROR FULL:");
+  console.error(error.response?.data);
+  console.error(error.message);
+
+  res.status(500).json({
+    success: false,
+    message: error.response?.data || error.message,
+  });
+}
 };
 
 module.exports = {

@@ -1,6 +1,6 @@
 // Central place to manage all backend API endpoints
 
-export const BASE_URL = "https://ebookcreator-1.onrender.com";
+export const BASE_URL = "http://localhost:8000";
 
 export const API_PATHS = {
   AUTH: {

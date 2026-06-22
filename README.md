@@ -22,33 +22,37 @@ Ebook marketplace
 User reviews & ratings
 Cloud storage integration
 Live Link=https://ebookcreator-me5g.onrender.com
-# Screenshots
+# Project Screenshots
 
-<p align="center">
-  <img src="./screenshots/Screenshot%202026-06-22%20161738.png" width="45%">
-  <img src="./screenshots/Screenshot%202026-06-22%20161754.png" width="45%">
-</p>
+## Home Page
+![Home](./screenshots/Screenshot%202026-06-22%20161738.png)
 
-<p align="center">
-  <img src="./screenshots/Screenshot%202026-06-22%20161806.png" width="45%">
-  <img src="./screenshots/Screenshot%202026-06-22%20161835.png" width="45%">
-</p>
+## Login Page
+![Login](./screenshots/Screenshot%202026-06-22%20161754.png)
 
-<p align="center">
-  <img src="./screenshots/Screenshot%202026-06-22%20161852.png" width="45%">
-  <img src="./screenshots/Screenshot%202026-06-22%20161905.png" width="45%">
-</p>
+## Dashboard
+![Dashboard](./screenshots/Screenshot%202026-06-22%20161806.png)
 
-<p align="center">
-  <img src="./screenshots/Screenshot%202026-06-22%20161920.png" width="45%">
-  <img src="./screenshots/Screenshot%202026-06-22%20161932.png" width="45%">
-</p>
+## Feature 1
+![Feature1](./screenshots/Screenshot%202026-06-22%20161835.png)
 
-<p align="center">
-  <img src="./screenshots/Screenshot%202026-06-22%20162045.png" width="45%">
-  <img src="./screenshots/Screenshot%202026-06-22%20162212.png" width="45%">
-</p>
+## Feature 2
+![Feature2](./screenshots/Screenshot%202026-06-22%20161852.png)
 
-<p align="center">
-  <img src="./screenshots/Screenshot%202026-06-22%20162222.png" width="45%">
-</p>
+## Feature 3
+![Feature3](./screenshots/Screenshot%202026-06-22%20161905.png)
+
+## Feature 4
+![Feature4](./screenshots/Screenshot%202026-06-22%20161920.png)
+
+## Feature 5
+![Feature5](./screenshots/Screenshot%202026-06-22%20161932.png)
+
+## Feature 6
+![Feature6](./screenshots/Screenshot%202026-06-22%20162045.png)
+
+## Feature 7
+![Feature7](./screenshots/Screenshot%202026-06-22%20162212.png)
+
+## Feature 8
+![Feature8](./screenshots/Screenshot%202026-06-22%20162222.png)
